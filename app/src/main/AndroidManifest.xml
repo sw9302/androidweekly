@@ -17,6 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.icephone.sw.androidweekly.dbcache"
+            android:name=".db.AndroidWeeklyProvider"
+            android:exported="false"
+            android:multiprocess="true"/>
     </application>
 
 </manifest>
