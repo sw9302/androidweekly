@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.icephone.sw.androidweekly.widget.WeeklyItem
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_padding_20"
+        android:textSize="@dimen/text_size_font_40"
+        android:textColor="@color/text_color_black_100"/>
+    <TextView
+        android:id="@+id/sub_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_padding_20"
+        android:textSize="@dimen/text_size_font_34"
+        android:textColor="@color/text_color_black_60"/>
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/main_padding_20"
+        android:textSize="@dimen/text_size_font_20"
+        android:textColor="@color/text_color_black_40"/>
+
+    <View
+        android:id="@+id/divider_line"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/main_padding_20"
+        android:layout_height="1px"
+        android:background="@color/text_color_black_15"/>
+
+</com.icephone.sw.androidweekly.widget.WeeklyItem>
