@@ -32,7 +32,7 @@ public class BatchSQLExecutor {
         ContentProviderClient cc = null;
         try {
             cc = AndroidWeeklyApplication.getContext().getContentResolver()
-                    .acquireContentProviderClient(DatabaseTable.SQLExecutor.URI_SQL_EXECUTOR);
+                    .acquireContentProviderClient(DatabaseTable.AUTHORITY);
             AndroidWeeklyProvider c = (AndroidWeeklyProvider)cc.getLocalContentProvider();
 
             ret = c.execSQL(this);

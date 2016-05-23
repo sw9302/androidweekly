@@ -20,9 +20,12 @@ public class AndroidWeeklyProvider extends ContentProvider {
     private AndroidWeeklyDatabaseHelper mDatabaseHelper;
 
     private static final int URI_GCDATA = 0;
+//    private static final int URI_EXEC_SQL = 1;
+
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     static {
         URI_MATCHER.addURI(DatabaseTable.AUTHORITY, DatabaseTable.GCTable.TABLE_NAME,URI_GCDATA);
+//        URI_MATCHER.addURI(DatabaseTable.AUTHORITY,DatabaseTable.SQLExecutor.TABLE_NAME,URI_EXEC_SQL);
     }
     @Override
     public boolean onCreate() {
