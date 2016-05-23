@@ -10,15 +10,11 @@ public class AndroidWeeklyApplication extends Application {
     private static Context mContext;
     private static AndroidWeeklyApplication mApplication;
 
-    public AndroidWeeklyApplication(){
-        super();
-        mApplication = this;
-        mContext = getApplicationContext();
-    }
     @Override
     public void onCreate(){
         super.onCreate();
-
+        mApplication = this;
+        mContext = getApplicationContext();
     }
 
     public static AndroidWeeklyApplication getApplication(){
