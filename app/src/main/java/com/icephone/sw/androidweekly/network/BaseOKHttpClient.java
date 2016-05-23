@@ -117,6 +117,8 @@ public abstract class BaseOKHttpClient<T>{
                                 return Observable.just(getResult(obj));
                             }
                         }
+                    }else{
+                        Log.e(TAG,"code=" + response.code());
                     }
                 } catch (Throwable e) {
                     e.printStackTrace();
