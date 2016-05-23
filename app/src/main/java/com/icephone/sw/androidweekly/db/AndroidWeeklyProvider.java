@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Pair;
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by sw on 2016/5/22.
@@ -102,6 +106,40 @@ public class AndroidWeeklyProvider extends ContentProvider {
             }
             default:
                 throw new IllegalArgumentException("Unknown URL " + uri);
+        }
+    }
+
+    private Lock _lock_ = new ReentrantLock();
+
+    public boolean execSQL(BatchSQLExecutor executor){
+        _lock_.lock();
+        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            executor.begin();
+            Pair<String,Object[]> n = null;
+            while ((n = executor.next()) != null){
+                if(n.second != null){
+                    db.execSQL(n.first,n.second);
+                }else{
+                    db.execSQL(n.first);
+                }
+            }
+            db.setTransactionSuccessful();
+            return true;
+        }catch (Throwable e){
+            e.printStackTrace();
+            return false;
+        }finally {
+            executor.end();
+            try {
+                if(db != null){
+                    db.endTransaction();
+                }
+            }catch (Throwable e){
+                e.printStackTrace();
+            }
+            _lock_.unlock();
         }
     }
 }

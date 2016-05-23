@@ -44,6 +44,8 @@ public final class AndroidWeeklyDatabaseHelper extends SQLiteOpenHelper {
         sb.append("unique(").append(DatabaseTable.GCTable.TYPE).append(")");
 
         db.execSQL(sb.toString());
+
+        sb.delete(0,sb.length());
     }
 
     @Override
