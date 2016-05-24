@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements
         mListView.setRefreshListener(this);
         mListView.isNeedLoadMore(false);
 //        loadData(1);
-        mApiManager = new ApiManager(Constant.WEEKLY_URL);
+        mApiManager = new ApiManager(this,Constant.WEEKLY_URL);
         mApiManager.setLoadDataListener(this);
         mApiManager.loadData();
     }

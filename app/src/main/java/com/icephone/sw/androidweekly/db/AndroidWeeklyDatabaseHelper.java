@@ -34,14 +34,14 @@ public final class AndroidWeeklyDatabaseHelper extends SQLiteOpenHelper {
         StringBuilder sb = new StringBuilder();
 
 
-        sb.append("create table if not exist ");
+        sb.append("create table if not exists ");
         sb.append(DatabaseTable.GCTable.TABLE_NAME);
         sb.append(" (");
         sb.append(DatabaseTable.GCTable._ID);
         sb.append(" INTEGER PRIMARY KEY AUTOINCREMENT,");
         sb.append(DatabaseTable.GCTable.TYPE).append(" INTEGER,");
         sb.append(DatabaseTable.GCTable.CONTENT).append(" TEXT,");
-        sb.append("unique(").append(DatabaseTable.GCTable.TYPE).append(")");
+        sb.append("unique(").append(DatabaseTable.GCTable.TYPE).append("));");
 
         db.execSQL(sb.toString());
 

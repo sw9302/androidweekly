@@ -1,5 +1,6 @@
 package com.icephone.sw.androidweekly.network;
 
+import android.content.Context;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -31,6 +32,7 @@ public abstract class BaseOKHttpClient<T>{
     private int mPage = 1;
     private OnLoadData mLoadDataListener;
     private OkHttpClient mClient;
+    protected Context mContext;
 
     public void setLoadDataListener(OnLoadData loadDataListener){
         mLoadDataListener = loadDataListener;
@@ -47,7 +49,8 @@ public abstract class BaseOKHttpClient<T>{
         void onNext(T t);
     }
 
-    public BaseOKHttpClient(String url){
+    public BaseOKHttpClient(Context ctx,String url){
+        mContext = ctx;
         mUrl = url;
     }
 
@@ -57,9 +60,9 @@ public abstract class BaseOKHttpClient<T>{
     }
 
     public void loadData(){
-        Observable<T> observable = sampleObservable();
-        if(observable != null){
-            observable.subscribeOn(Schedulers.io())
+        Observable<T> databaseObservable = databaseObservable();
+        if(databaseObservable != null){
+            databaseObservable.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<T>() {
                         T t = null;
@@ -78,28 +81,79 @@ public abstract class BaseOKHttpClient<T>{
                                 }else{
                                     Log.e(TAG,"LoadDataListener is null");
                                 }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.d(TAG, "database onError()");
+                            e.printStackTrace();
+                        }
+
+                        @Override
+                        public void onNext(T t) {
+                            Log.d(TAG, "database onNext()");
+                            this.t = t;
+                        }
+                    });
+        }else{
+            Log.e(TAG,"databaseObservable is null");
+        }
+        Observable<T> serverObservable = serverObservable();
+        if(serverObservable != null){
+            serverObservable.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<T>() {
+                        T t = null;
+                        @Override
+                        public void onCompleted() {
+                            Log.d(TAG, "server onCompleted()");
+                            if(t != null){
+                                if(mLoadDataListener != null){
+                                    LoadState state;
+                                    if(mPage == 1){
+                                        state = LoadState.CLEAR;
+                                    }else{
+                                        state = LoadState.OK;
+                                    }
+                                    mLoadDataListener.onCompleted(t,state);
+                                }else{
+                                    Log.e(TAG,"LoadDataListener is null");
+                                }
                                 mPage++;
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
-                            Log.d(TAG, "onError()");
+                            Log.d(TAG, "server onError()");
                             e.printStackTrace();
                         }
 
                         @Override
                         public void onNext(T t) {
-                            Log.d(TAG, "onNext()");
+                            Log.d(TAG, "server onNext()");
                             this.t = t;
                         }
                     });
         }else{
-            Log.e(TAG,"Observable is null");
+            Log.e(TAG,"serverObservable is null");
         }
     }
 
-    private Observable<T> sampleObservable(){
+    public abstract JSONObject getFromDatabse();
+    public abstract void saveToDatabase(JSONObject obj);
+
+    private Observable<T> databaseObservable(){
+        return Observable.defer(new Func0<Observable<T>>() {
+            @Override
+            public Observable<T> call() {
+                return Observable.just(getResult(getFromDatabse()));
+            }
+        });
+    }
+
+    private Observable<T> serverObservable(){
         return Observable.defer(new Func0<Observable<T>>() {
             @Override
             public Observable<T> call() {
@@ -114,6 +168,7 @@ public abstract class BaseOKHttpClient<T>{
                             Log.e(TAG,"body=" + data);
                             JSONObject obj = new JSONObject(data);
                             if(obj.optInt("errCode") == 200){
+                                saveToDatabase(obj);
                                 return Observable.just(getResult(obj));
                             }
                         }
