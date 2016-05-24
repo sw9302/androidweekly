@@ -216,4 +216,6 @@ public abstract class BaseOKHttpClient<T>{
     public abstract void prepaerParams();
 
     public abstract T getResult(JSONObject obj);
+
+    public int getPageIndex(){return mPage;}
 }

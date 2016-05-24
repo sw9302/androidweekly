@@ -51,11 +51,13 @@ public class ApiManager extends BaseOKHttpClient<ArrayList<WeeklyInfo>>{
 
     @Override
     public void saveToDatabase(JSONObject obj) {
-        BatchSQLExecutor sql = new BatchSQLExecutor(mContext);
-        sql.appendSQL("insert into " +
-                DatabaseTable.GCTable.TABLE_NAME + " (type,content) values (?,?)",
-                new String[]{DatabaseTable.GCTable.TYPE_WEEKLY + "",obj.toString()});
-        sql.execute();
+        if(getPageIndex() == 1){
+            BatchSQLExecutor sql = new BatchSQLExecutor(mContext);
+            sql.appendSQL("insert into " +
+                            DatabaseTable.GCTable.TABLE_NAME + " (type,content) values (?,?)",
+                    new String[]{DatabaseTable.GCTable.TYPE_WEEKLY + "",obj.toString()});
+            sql.execute();
+        }
     }
 
     @Override
