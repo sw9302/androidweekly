@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.icephone.sw.androidweekly.utils.Constant;
 
@@ -135,6 +136,9 @@ public abstract class BaseOKHttpClient<T>{
                                     mParams.remove(Constant.PAGE_INDEX);
                                 }
 //                            }
+                            if(t == null){
+                                Toast.makeText(mContext,"没有更多了",Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
