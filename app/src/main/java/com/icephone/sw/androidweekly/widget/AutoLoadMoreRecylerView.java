@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import com.icephone.sw.androidweekly.ui.ArrayAdapter;
+
+
 /**
  * Created by sw on 2016/5/9.
  */
@@ -76,6 +79,9 @@ public class AutoLoadMoreRecylerView extends SwipeRefreshLayout implements Swipe
         }
         if (mListView != null){
             mListView.setLoadState(isLoading);
+            if(!isLoading){
+                mListView.loadFinish();
+            }
         }
     }
 
@@ -125,16 +131,17 @@ public class AutoLoadMoreRecylerView extends SwipeRefreshLayout implements Swipe
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView,dx,dy);
 
-                int lastVisibleItem =
-                        ((LinearLayoutManager)mLayoutManager).findLastVisibleItemPosition();
                 int firstVisibleItem =
                         ((LinearLayoutManager)mLayoutManager).findFirstVisibleItemPosition();
+                int visibleItemCount = recyclerView.getChildCount();
                 int totalItemCount = mLayoutManager.getItemCount();
                 if(isAllowLoadMore){
-                    if(lastVisibleItem + 1 >= totalItemCount && dy > 0){
+                    if( totalItemCount >= visibleItemCount &&
+                            (totalItemCount - visibleItemCount) <= firstVisibleItem && dy > 0){
                         if(isLoadingMore){
                             Log.d(TAG,"RecylerView is loading");
                         }else{
+                            ((ArrayAdapter)getAdapter()).setHasFoot(true);
                             if(mAutoLoadMoreListener != null){
                                 mAutoLoadMoreListener.loadNextPage();
                                 isLoadingMore = true;
@@ -149,7 +156,11 @@ public class AutoLoadMoreRecylerView extends SwipeRefreshLayout implements Swipe
 
         };
 
-
+        public void loadFinish(){
+            if(getAdapter() != null){
+                ((ArrayAdapter)getAdapter()).setHasFoot(false);
+            }
+        }
 
         public void setAutoLoadMoreListener(@NonNull AutoLoadMoreListener listener){
             this.mAutoLoadMoreListener = listener;

@@ -99,6 +99,16 @@ public abstract class BaseOKHttpClient<T>{
         }else{
             Log.e(TAG,"databaseObservable is null");
         }
+
+        init();
+
+    }
+
+    public void forceLoad(){
+        init();
+    }
+
+    private void init(){
         Observable<T> serverObservable = serverObservable();
         if(serverObservable != null){
             serverObservable.subscribeOn(Schedulers.io())
@@ -108,7 +118,7 @@ public abstract class BaseOKHttpClient<T>{
                         @Override
                         public void onCompleted() {
                             Log.d(TAG, "server onCompleted()");
-                            if(t != null){
+//                            if(t != null){
                                 if(mLoadDataListener != null){
                                     LoadState state;
                                     if(mPage == 1){
@@ -121,7 +131,10 @@ public abstract class BaseOKHttpClient<T>{
                                     Log.e(TAG,"LoadDataListener is null");
                                 }
                                 mPage++;
-                            }
+                                if(mParams.containsKey(Constant.PAGE_INDEX)){
+                                    mParams.remove(Constant.PAGE_INDEX);
+                                }
+//                            }
                         }
 
                         @Override

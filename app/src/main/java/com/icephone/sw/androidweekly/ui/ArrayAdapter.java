@@ -24,6 +24,7 @@ public abstract class ArrayAdapter<T> extends RecyclerView.Adapter {
 //    private static final int TYPE_HEADER = 0;
     private static final int TYPE_FOOTER = 1;
     private boolean isAlllowLoadMore = false;
+    private boolean mHasFoot = false;
 
     public ArrayAdapter(Context context) {
         mContext = context;
@@ -59,7 +60,7 @@ public abstract class ArrayAdapter<T> extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         if(mDataValid && mData != null){
-            return mData.size() + 1;
+            return mData.size() + (mHasFoot ? 1 : 0);
         }
         return 0;
     }
@@ -136,11 +137,16 @@ public abstract class ArrayAdapter<T> extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         // 最后一个item设置为footerView
-        if (position + 1 == getItemCount() && isAlllowLoadMore) {
+        if (mHasFoot && position == mData.size() && isAlllowLoadMore) {
             return TYPE_FOOTER;
         }else{
             return TYPE_ITEM;
         }
+    }
+
+    public void setHasFoot(boolean hasFoot){
+        mHasFoot = hasFoot;
+        notifyDataSetChanged();
     }
 
     public List<T> getData(){

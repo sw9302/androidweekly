@@ -53,7 +53,7 @@ public class ApiManager extends BaseOKHttpClient<ArrayList<WeeklyInfo>>{
     public void saveToDatabase(JSONObject obj) {
         if(getPageIndex() == 1){
             BatchSQLExecutor sql = new BatchSQLExecutor(mContext);
-            sql.appendSQL("insert into " +
+            sql.appendSQL("insert or replace into " +
                             DatabaseTable.GCTable.TABLE_NAME + " (type,content) values (?,?)",
                     new String[]{DatabaseTable.GCTable.TYPE_WEEKLY + "",obj.toString()});
             sql.execute();

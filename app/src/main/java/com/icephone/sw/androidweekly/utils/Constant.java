@@ -5,7 +5,7 @@ package com.icephone.sw.androidweekly.utils;
  */
 public class Constant {
 
-    public static final String WEEKLY_URL = "http://192.168.1.104:9090/androidDevWeekly";
+    public static final String WEEKLY_URL = "http://192.168.1.114:9090/androidDevWeekly";
 
     public static final String PAGE_INDEX = "pageIndex";
 }

@@ -30,11 +30,11 @@ public class MainActivity extends AppCompatActivity implements
 
         mListView = (AutoLoadMoreRecylerView) findViewById(R.id.listview);
         mAdapter = new WeeklyAdapter(this);
-        mAdapter.setLoadMore(false);
+        mAdapter.setLoadMore(true);
         mListView.setAdapter(mAdapter);
         mListView.setAutoLoadMoreListener(this);
         mListView.setRefreshListener(this);
-        mListView.isNeedLoadMore(false);
+        mListView.isNeedLoadMore(true);
 //        loadData(1);
         mApiManager = new ApiManager(this,Constant.WEEKLY_URL);
         mApiManager.setLoadDataListener(this);
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void loadNextPage() {
-       mApiManager.loadData();
+       mApiManager.forceLoad();
     }
 
     @Override
